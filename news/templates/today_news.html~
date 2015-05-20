@@ -1,0 +1,236 @@
+{% extends 'base.html'%}
+{% load thumbnail news  %}
+{% load static from staticfiles %}
+{% block titlepage %}
+<title>{{ meta_today_title }}</title>
+<meta property="og:title" content="{{ meta_today_title }}"/>
+{% endblock %}
+{% block newsa %}
+<meta content="{{ meta_author }}" name="author"/>
+<meta property="article:author" content="{{ meta_author }}"/>
+{% endblock %}
+{% block newsd %}
+<meta content="{{ meta_today_des }}" name="description"/>
+<meta property="og:description" content="{{ meta_today_des }}"/>
+{% endblock %}
+{% block newsk %}{{ meta_today_keys }}{% endblock %}
+{% block newsi %}
+{% thumbnail new.first_image.image "720" as im %}
+{{ im.url }}
+{% empty %}
+{% static 'tiempoturco/app/images/no-image.png' %}
+{% endthumbnail %}
+{% endblock %}
+{% block slidermenu%}
+<li id="slider" class="show-for-medium-up news-slider">
+    <ul id="ulslider" class="example-orbit-content" data-orbit data-options="
+            pause_on_hover:false;
+            slide_number_text:de;
+            timer_show_progress_bar: false;
+            bullets: false;
+            slide_number: false">
+        {% for new in lnews %}
+        <li data-orbit-slide="headline-{{forloop.counter}}">
+            <div>
+                <a class="news-title"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'H:i:s' }}
+                    </time>
+                    <h2>{{new.title|truncatewords:'8'}}</h2>
+                </a>
+                <a class="share-popup gn-icon-other nopadding gn-icon-facebook"
+                   href="http://www.facebook.com/sharer.php?u={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other nopadding gn-icon-twitter"
+                   href="http://twitter.com/share?url={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}&text={{ new.title }}"
+                   target="_blank"></a>
+            </div>
+        </li>
+        {% empty %}
+        <p>No hay noticias disponibles.</p>
+        {% endfor %}
+    </ul>
+</li>
+{% endblock %}
+{% block newscontent %}
+<h1 class="text-center">HOY</h1>
+{% for new in object_list %}
+<article class="row articles-news">
+    <header>
+        <!-- Cabezera del articulo -->
+        <div>
+            <h2><a href="{% url 'TopicNewsView' new.topic %}">{{ new.topic }}</a></h2>
+
+            <h3><a href="{% url 'SubTopicNewsView' new.subtopic %}">{{ new.subtopic }}</a></h3>
+        </div>
+        <h1>{{ new.title }}</h1>
+
+        <div class="row">
+            <div class="small-7 medium-7 large-9 columns">
+                <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'h:i a, l j \d\e F
+                    \d\e Y' }}
+                </time>
+                <h3 class="divider-right">{{ new.place }}</h3>
+
+                <h2><a href="{% url 'AuthorInfoView' new.author.username %}">{{ new.author.first_name }} {{
+                    new.author.last_name }}</a></h2>
+
+                <h3>{{ new.author.authorinfo.link_own|urlize }}</h3>
+            </div>
+            <div class="small-5 medium-5 large-3 columns social-media">
+                <a class="share-popup gn-icon-other gn-icon-twitter"
+                   href="http://twitter.com/share?url={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}&text={{ new.title }}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other gn-icon-googleplus"
+                   href="https://plus.google.com/share?url={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other gn-icon-facebook"
+                   href="http://www.facebook.com/sharer.php?u={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}"
+                   target="_blank"></a>
+                <a class="gn-icon-other gn-icon-mail"
+                   href="mailto:?Subject={{ new.title }}&Body={{ new.content }} {{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}"></a>
+            </div>
+        </div>
+    </header>
+    <section class="row">
+        {% if new.first_video %}
+        <div class="flex-video player-video">
+            {% video new.first_video.video "large" %}
+        </div>
+        {% else %}
+        <figure class="small-10 large-7">
+            {% thumbnail new.first_image.image "720" as im %}
+            <img src="{{ im.url }}" title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+            {% empty %}
+            {% endthumbnail %}
+            <figcaption>{{ new.first_image.caption }}</figcaption>
+        </figure>
+        <h2 class="review">{{ new.content|search:'^.*'|removetags:"p"|safe }}</h2>
+        {% if forloop.first %}
+        <aside class="small-10 large-3">
+            <h2>Recomendados</h2>
+            {% for new in rnews %}
+            <div data-article="">
+                <a data-event="tile"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    {% thumbnail new.first_image.image "150x150" as im %}
+                    <img src="{{ im.url }}" title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                    {% empty %}
+                    <img src="{% static 'tiempoturco/app/images/no-image.png' %}" width="150" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                    {% endthumbnail %}
+                    <h3>{{ new.title }}</h3>
+                </a>
+            </div>
+            {% empty %}
+            <p>No hay noticias recomendadas disponibles.</p>
+            {% endfor %}
+            <h2>Más</h2>
+            {% for new in mnews %}
+            <div data-article="">
+                <a data-event="tile"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    <h3>{{ new.title }}</h3>
+                </a>
+            </div>
+            {% empty %}
+            <p>No hay mas noticias importantes noticias disponibles.</p>
+            {% endfor %}
+        </aside>
+        {% endif %}
+        <p class="review">{{ new.content|search:'^.*'|removetags:"p"|safe }}
+            <a href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                Leer mas...
+            </a>
+        </p>
+        <ul class="tags">
+            {% if new.keywords.all %}
+            {% for keywords in new.keywords.all %}
+            <li><a href="{% url 'KeyWordsNewsView' keywords.name|slugify %}">{{ keywords.name }}</a></li>
+            {% endfor %}
+            {% else %}
+            <li><a href="{{ meta_url }}">Tiempo Turco</a></li>
+            {% endif %}
+        </ul>
+
+        <p>[{{ new.source|urlize }}] <span class="gn-icon-other gn-icon-checkbox-checked"></span></p>
+    </section>
+    <footer class="row">
+        <div class="small-12 large-6 columns">
+            <a class="gn-icon-other gn-icon-mail"
+               href="mailto:?Subject={{ new.title }}&Body={{ new.content }} {{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}"></a>
+            <a class="share-popup gn-icon-other gn-icon-facebook"
+               href="http://www.facebook.com/sharer.php?u={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}"
+               target="_blank"></a>
+            <a class="share-popup gn-icon-other gn-icon-googleplus"
+               href="https://plus.google.com/share?url={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}"
+               target="_blank"></a>
+            <a class="share-popup gn-icon-other gn-icon-twitter divider-right"
+               href="http://twitter.com/share?url={{ meta_url }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}&text={{ new.content }}"
+               target="_blank"></a>
+            <a class="gn-icon-other gn-icon-bubble" href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}#disqus_thread"></a>
+        </div>
+        <div class="small-12 large-4 columns">
+            <a class="gn-icon-other gn-icon-link divider-left" style="cursor: text"></a>
+        </div>
+    </footer>
+    <div id="disqus_thread" class="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'tiempoturco'; // required: replace example with your forum shortname
+        var disqus_identifier = '{{ new.slug }}';
+        var disqus_title = '{{ new.title }}';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+        Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</article>
+{% empty %}
+<p> No se han publicado noticias en el transcurso del presente día, lo sentimos mucho, si quieres puedes enviarnos una
+    noticia para que la públiquemos!</p>
+{% endfor %}
+{% if is_paginated %}
+<div class="pagination-centered">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="arrow"><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+        <li class="arrow unavailable"><a href="">&laquo;</a></li>
+        {% endif %}
+        {% for page_num in paginator.page_range %}
+        <li
+        {% if page_num == page_obj.number %} class="current" {% endif %} ><a href="?page={{ page_num }}">{{ page_num
+        }}</a></li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="arrow"><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+        <li class="arrow unavailable"><a href="">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+{% block otherscripts %}
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'tiempoturco'; // required: replace example with your forum shortname
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+{% endblock %}

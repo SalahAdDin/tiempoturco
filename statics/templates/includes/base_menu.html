@@ -1,0 +1,299 @@
+{% load thumbnail embed_video_tags news %}
+{% load static from staticfiles %}
+{%if  users.authorinfo %}
+<div class="content active" id="panel2-1">
+<div style="border-bottom: 1px dashed #C6D0DA; margin-bottom: .625rem">
+    <figure class="clearfix" style="margin: 1.25rem 0.3125rem 0.3125rem 0.3125rem">
+        {% thumbnail users.authorinfo.photo "200" as im %}
+        <img class="th radius small-12 large-6 left" src="{{ im.url }}" title="{{ users.username }}"
+             alt="{{ users.username }}"/>
+        {% empty %}
+        <img class="th radius small-12 large-6 left" src="{% static 'tiempoturco/app/images/no-profile.png' %}"
+             title="{{ users.username }}" alt="{{ users.username }}"/>
+        {% endthumbnail %}
+        <figcaption class="large-6 columns">
+            <h2>{{ users.get_full_name }}</h2>
+            <h6>{{ users.authorinfo.age }}</h6>
+            <h6><a href="{{ users.authorinfo.link_own }}" rel="nofollow">{{ users.authorinfo.link_own|sub:'^.*[/]'|safe}}
+            </a></h6>
+            </figcaption>
+        </figcaption>
+    </figure>
+    <blockquote style="margin-bottom: 0.3125rem">{{ users.authorinfo.biography }}</blockquote>
+</div>
+</div>
+<div class="content" id="panel2-2">
+    <h2 class="text-center">Noticias Destacadas</h2>
+    {% for new in featured %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                {% if new.get_video %}
+                    {% video new.get_video.video as my_video%}
+                        <img src="{{ my_video.thumbnail }}" alt="new.get_video.name"
+                             title="new.get_video.name"/>
+                    {% endvideo %}
+                {% else %}
+                {% thumbnail new.first_image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% endthumbnail %}
+                {% endif %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+            {{ new.title }}
+            <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay noticias locales hasta el momento.</p>
+    {% endfor %}
+</div>
+<div class="content" id="panel2-3">
+    <h2 class="text-center">Galería Fotográfica</h2>
+    {% for gallery in gallerys %}
+    {% if gallery.get_all_images and gallery.get_all_videos or not gallery.get_all_videos %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'GalleryDefaultView' gallery.slug %}">
+                {% thumbnail gallery.get_first_image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ gallery.get_first_image.name }}"
+                     alt="{{ gallery.get_first_image.name }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ gallery.name }}"
+                     alt="{{ gallery.name }}"/>
+                {% endthumbnail %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'GalleryDefaultView' gallery.slug %}">{{ gallery.name }}
+            <time datetime="{{ gallery.created_date|date:'Y-m-d H:i:s' }}">{{ gallery.created_date|date:'H:i:s' }}
+            </time></a>
+        </h3>
+    </div>
+    {% endif %}
+    {% empty %}
+    <p>No hay galerías de imágenes hasta el momento.</p>
+    {% endfor %}
+    <h2>Imagenes</h2>
+    {% for image in images%}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'ImageDefaultView' image.slug %}">
+                {% thumbnail image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ image.name }}"
+                     alt="{{ image.name }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ gallery.name }}"
+                     alt="{{ gallery.name }}"/>
+                {% endthumbnail %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'ImageDefaultView' image.slug %}">{{ image.name }}
+            <time datetime="{{ image.created_date|date:'Y-m-d H:i:s' }}">{{ image.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay imagenes publicados hasta el momento.</p>
+    {% endfor %}
+</div>
+<div class="content" id="panel2-4">
+    <h2 class="text-center">Galería de Videos</h2>
+    {% for gallery in gallerys %}
+    {% if not gallery.get_all_images %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'GalleryDefaultView' gallery.slug %}">
+                {% video gallery.get_first_video.video as my_video%}
+                <img src="{{ my_video.thumbnail }}" alt="gallery.get_first_video.name"
+                     title="gallery.get_first_video.name"/>
+                {% endvideo %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'GalleryDefaultView' gallery.slug %}">{{ gallery.name }}
+            <time datetime="{{ gallery.created_date|date:'Y-m-d H:i:s' }}">{{ gallery.created_date|date:'H:i:s' }}
+            </time></a>
+        </h3>
+    </div>
+    {% endif %}
+    {% empty %}
+    <p>No hay galerías de imágenes hasta el momento.</p>
+    {% endfor %}
+    <h2>Videos</h2>
+    {% for video in videos %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'VideoDefaultView' video.slug %}">
+                {% video video.video as my_video%}
+                <img src="{{ my_video.thumbnail }}" alt="{{ video.name }}" title="{{ video.name }}"/>
+                {% endvideo %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'VideoDefaultView' video.slug %}">{{ video.name }}
+            <time datetime="{{ video.created_date|date:'Y-m-d H:i:s' }}">{{ video.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay videos publicados hasta el momento.</p>
+    {% endfor %}
+</div>
+{% else %}
+<div class="content active" id="panel2-1">
+    <!-- <div>
+        Puede que lo necesitemos
+    </div> -->
+    <h2 class="text-center">Ultimas Noticias</h2>
+    {% for new in latest %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                {% if new.get_video %}
+                    {% video new.get_video.video as my_video%}
+                        <img src="{{ my_video.thumbnail }}" alt="new.get_video.name"
+                             title="new.get_video.name"/>
+                    {% endvideo %}
+                {% else %}
+                {% thumbnail new.first_image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% endthumbnail %}
+                {% endif %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+            {{ new.title }}
+            <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay noticias nuevas hasta el momento.</p>
+    {% endfor %}
+</div>
+<div class="content" id="panel2-2">
+    <h2 class="text-center">Noticias Destacadas</h2>
+    {% for new in featured %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                {% if new.get_video %}
+                    {% video new.get_video.video as my_video%}
+                        <img src="{{ my_video.thumbnail }}" alt="new.get_video.name"
+                             title="new.get_video.name"/>
+                    {% endvideo %}
+                {% else %}
+                {% thumbnail new.first_image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% endthumbnail %}
+                {% endif %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+            {{ new.title }}
+            <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay noticias locales hasta el momento.</p>
+    {% endfor %}
+</div>
+<div class="content" id="panel2-3">
+    <h2 class="text-center">Galería Fotográfica</h2>
+    {% for gallery in gallerys %}
+    {% if gallery.get_all_images and gallery.get_all_videos or not gallery.get_all_videos %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'GalleryDefaultView' gallery.slug %}">
+                {% thumbnail gallery.get_first_image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ gallery.get_first_image.name }}"
+                     alt="{{ gallery.get_first_image.name }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ gallery.name }}"
+                     alt="{{ gallery.name }}"/>
+                {% endthumbnail %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'GalleryDefaultView' gallery.slug %}">{{ gallery.name }}
+            <time datetime="{{ gallery.created_date|date:'Y-m-d H:i:s' }}">{{ gallery.created_date|date:'H:i:s' }}
+            </time></a>
+        </h3>
+    </div>
+    {% endif %}
+    {% empty %}
+    <p>No hay galerías de imágenes hasta el momento.</p>
+    {% endfor %}
+    <h2>Imagenes</h2>
+    {% for image in images%}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'ImageDefaultView' image.slug %}">
+                {% thumbnail image.image "60x60" as im %}
+                <img class="th [radius]" id='imggallery' src="{{ im.url }}" title="{{ image.name }}"
+                     alt="{{ image.name }}"/>
+                {% empty %}
+                <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ gallery.name }}"
+                     alt="{{ gallery.name }}"/>
+                {% endthumbnail %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'ImageDefaultView' image.slug %}">{{ image.name }}
+            <time datetime="{{ image.created_date|date:'Y-m-d H:i:s' }}">{{ image.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay imagenes publicados hasta el momento.</p>
+    {% endfor %}
+</div>
+<div class="content" id="panel2-4">
+    <h2 class="text-center">Galería de Videos</h2>
+    {% for gallery in gallerys %}
+    {% if not gallery.get_all_images %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'GalleryDefaultView' gallery.slug %}">
+                {% video gallery.get_first_video.video as my_video%}
+                <img src="{{ my_video.thumbnail }}" alt="gallery.get_first_video.name"
+                     title="gallery.get_first_video.name"/>
+                {% endvideo %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'GalleryDefaultView' gallery.slug %}">{{ gallery.name }}
+            <time datetime="{{ gallery.created_date|date:'Y-m-d H:i:s' }}">{{ gallery.created_date|date:'H:i:s' }}
+            </time></a>
+        </h3>
+    </div>
+    {% endif %}
+    {% empty %}
+    <p>No hay galerías de imágenes hasta el momento.</p>
+    {% endfor %}
+    <h2>Videos</h2>
+    {% for video in videos %}
+    <div class="news-article" data-article="">
+        <h3 class="clearfix">
+            <a data-event="tile" class="left small-3" href="{% url 'VideoDefaultView' video.slug %}">
+                {% video video.video as my_video%}
+                <img src="{{ my_video.thumbnail }}" alt="{{ video.name }}" title="{{ video.name }}"/>
+                {% endvideo %}
+            </a>
+            <a data-event="tile" class="right small-9 large-9"
+               href="{% url 'VideoDefaultView' video.slug %}">{{ video.name }}
+            <time datetime="{{ video.created_date|date:'Y-m-d H:i:s' }}">{{ video.created_date|date:'H:i:s' }}</time></a>
+        </h3>
+    </div>
+    {% empty %}
+    <p>No hay videos publicados hasta el momento.</p>
+    {% endfor %}
+</div>
+{% endif %}

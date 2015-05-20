@@ -1,0 +1,273 @@
+"""
+Django settings for tiempoturco project.
+
+For more information on this file, see
+https://docs.djangoproject.com/en/1.6/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/1.6/ref/settings/
+"""
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'o5+(*-5bus0e%28%j#%2-5*u3$dj508d01l*&z!1cjt%ca6=y@'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+TEMPLATE_DEBUG = True
+THUMBNAIL_DEBUG = True
+
+from django.utils.translation import ugettext_lazy as _
+
+# TCP definition
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
+    'tiempoturco.context_processors.basic',
+    'django.core.context_processors.static',
+    'django.contrib.messages.context_processors.messages',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+)
+
+# Application definition
+
+INSTALLED_APPS = (
+    # 'tiempoturco.apps.ZamanDjangoSuitConfig',
+    'suit',
+    
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    
+    'ckeditor',
+    'djcelery',
+    'django_extensions',
+    'embed_video',
+    'haystack',
+    'import_export',
+    'permission',
+    'robots',
+    'smart_selects',
+    'sorl.thumbnail',
+    
+    'authors',
+    'docs',
+    'news',
+    'tags',
+    'visuals',
+)
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+)
+
+ROOT_URLCONF = 'tiempoturco.urls'
+WSGI_APPLICATION = 'tiempoturco.wsgi.application'
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.7/topics/i18n/
+
+LANGUAGE_CODE = 'es-co'  # Por defecto'en-us'
+LANGUAGES = (
+    ('es',  _('Spanish')),
+    ('en',  _('English')),
+    ('tr',  _('Turkish')),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, "locale"),
+)
+TIME_ZONE = 'America/Bogota'    # Por defecto es 'UTC'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
+SITE_ID = 1
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.6/howto/static-files/
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Backends
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'permission.backends.PermissionBackend',
+)
+
+# Embed Video Settings
+EMBED_VIDEO_BACKENDS = (
+    'embed_video.backends.YoutubeBackend',
+    'embed_video.backends.VimeoBackend',
+    'embed_video.backends.SoundCloudBackend',
+)
+
+EMBED_VIDEO_TIMEOUT = 10
+
+# Robots
+ROBOTS_CACHE_TIMEOUT = 60*60*24
+ROBOTS_SITEMAP_URLS = [
+    'http://www.tiempoturco.com/sitemap.xml',  # sitemap.domain
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# CKEditor Options
+CKEDITOR_UPLOAD_PATH = "/statics/media/uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'office2013',
+        'toolbar': [
+            {'name': 'document', 'groups': ['mode', 'document', 'doctools'],
+             'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'clipboard', 'groups': ['clipboard', 'undo'],
+             'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'groups': ['find', 'selection', 'spellchecker'],
+             'items': ['Find', 'Replace', '-', 'SelectAll', '-', 'Scayt']},
+            '/',
+            {'name': 'basicstyles', 'groups': ['basicstyles', 'cleanup'],
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph', 'groups': ['list', 'indent', 'blocks', 'align', 'bidi'],
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft',
+                       'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert', 'items': ['Image', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '',
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            {'name': 'others', 'items': ['-']},
+            {'name': 'about', 'items': ['About']}
+        ],
+        'width': 650,
+        'languages': {
+            'ar': 1,
+            'en': 1,
+            'es': 1,
+            'ru': 1,
+            'tr': 1,
+        },
+        'toolbarCanCollapse': 'true',
+    },
+}
+
+# Grappelli customization
+GRAPPELLI_ADMIN_TITLE = 'Tiempo Turco'
+GRAPPELLI_INDEX_DASHBOARD = 'tiempoturco.dashboard.CustomIndexDashboard'
+
+# Search
+# HayStack configuration
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://localhost:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.BaseSignalProcessor'
+
+HAYSTACK_DEFAULT_OPERATOR = 'AND'
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 25
+
+# Suit config
+SUIT_CONFIG = {
+    # header
+    'ADMIN_NAME': 'Tiempo Turco',
+    'HEADER_DATE_FORMAT': 'l j \d\e F \d\e Y',  # 'l, j. F Y',
+    'HEADER_TIME_FORMAT': 'h:i a',
+
+    # forms
+    'SHOW_REQUIRED_ASTERISK': True,  # Default True
+    'CONFIRM_UNSAVED_CHANGES': True,  # Default True
+
+    # menu
+    'SEARCH_URL': '/admin/news/new',
+
+    'MENU': (
+        'auth',
+        '-',
+        'sites',
+        'robots',
+        {'app': 'djcelery', 'label': _('Tasks')},
+        '-',
+        {'app': 'docs', 'label': _('Documentation')},
+        '-',
+        {'app': 'authors', 'label': _('Journalist')},
+        '-',
+        {'app': 'visuals', 'label': _('Visual Media')},
+        '-',
+        {'app': 'news', 'label': _('News')},
+        '-',
+        {'app': 'tags', 'label': _('Tags')},
+    ),
+    'MENU_ICONS': {
+        'auth': 'icon-lock',
+        'sites': 'icon-leaf',
+        'robots': 'icon-qrcode',
+        'djcelery': 'icon-tasks',
+        'authors': 'icon-pencil',
+        'docs': 'icon-file',
+        'news': 'icon-book',
+        'visuals': 'icon-film',
+        'tags': 'icon-tag',
+    },
+    
+    'MENU_OPEN_FIRST_CHILD': True,  # Default True
+    # 'MENU_EXCLUDE': ('auth.group',),
+    # 'MENU': (
+    #     'sites',
+    #     {'app': 'auth', 'icon':'icon-lock', 'models': ('user', 'group')},
+    #     {'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
+    #     {'label': 'Support', 'icon':'icon-question-sign', 'url': '/support/'},
+    # ),
+
+    # misc
+    'LIST_PER_PAGE': 20
+}

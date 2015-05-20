@@ -1,0 +1,157 @@
+{% extends 'base.html'%}
+{% load thumbnail embed_video_tags news %}
+{% load static from staticfiles %}
+{% block titlepage %}
+<title>{{ name|title }}</title>
+<meta property="og:title" content="{{ name|title }}"/>
+{% endblock %}
+{% block newsa %}
+<meta content="{{ meta_author }}" name="author"/>
+<meta property="article:author" content="{{ meta_author }}"/>
+{% endblock %}
+{% block newsd %}
+<meta content="Autores publicados en {{ site.name }}" name="description"/>
+<meta property="og:description" content="Autores publicados en {{ site.name }}"/>
+{% endblock %}
+{% block newsk %}{{ name }},{{ meta_today_keys }}{% endblock %}
+{% block slidermenu%}
+<li id="slider" class="show-for-medium-up news-slider">
+    <ul id="ulslider" class="" data-orbit data-options="
+            pause_on_hover:false;
+            slide_number_text:de;
+            timer_show_progress_bar: false;
+            bullets: false;
+            slide_number: false" yle="height: 3.75rem !important;">
+        {% for new in lnews %}
+        <li data-orbit-slide="headline-{{forloop.counter}}">
+            <div>
+                <a class="left"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'H:i:s' }}
+                    </time>
+                    <h2>{{new.title|truncatewords:'8'}}</h2>
+                </a>
+                <a class="share-popup gn-icon-other nopadding gn-icon-facebook"
+                   href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ news.title }}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other nopadding gn-icon-twitter"
+                   href="http://twitter.com/share?url=http://{{ site.domain }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}&text={{ new.title }}"
+                   target="_blank"></a>
+            </div>
+        </li>
+        {% empty %}
+        <p>No hay noticias disponibles.</p>
+        {% endfor %}
+    </ul>
+</li>
+{% endblock %}
+{% block newscontent %}
+<h1 class="text-center">Autores</h1>
+<div class="row articles-news">
+    <div class="small-12 large-9 columns">
+    {% for authorinfo in object_list %}
+        <article class="p-normalize keys" style="margin-top: .625rem">
+            <header>
+                <!-- Cabezera del articulo -->
+                <div class="row">
+                    <div class="small-12 medium-9 large-9 columns">
+                        <h1>{{ authorinfo.user.get_full_name }}</h1>
+                    </div>
+                    <div class="small-12 medium-3 large-3 columns">
+                        <h2><a href="">{% if not authorinfo.age %}0{% else %}{{authorinfo.age}}{% endif %}</a></h2>
+
+                        <h3><a href="{{ authorinfo.link_own }}" rel="nofollow">{{ authorinfo.link_own|sub:'^.*[/]'|safe}} </a></h3>
+                    </div>
+                </div>
+            </header>
+            <div class="row">
+                <figure class="small-10 large-4 columns text-center">
+                    {% thumbnail authorinfo.photo "200" as im %}
+                    <img class="th [radius]" src="{{ im.url }}" title="{{ authorinfo.user.username }}"
+                         alt="{{ authorinfo.user.name }}"/>
+                    {% empty %}
+                    <img class="th [radius]" id='imggallery' src="{% static 'tiempoturco/app/images/no-profile.png' %}"
+                         title="{{ authorinfo.user.username }}" alt="{{ authorinfo.user.username }}"/>
+                    {% endthumbnail %}
+                    <!-- si no hay imagenes, entonces hay video, retornamos el player del video -->
+                </figure>
+                <div class="small-12 large-8 columns">
+                    <section class="row">
+                        <p class="" style="font-size: 1rem; margin: 1rem 0;">{{ authorinfo.biography|safe }}
+                            <a href="{% url 'AuthorInfoView' authorinfo.user.username %}">Ver mas...</a></p>
+                    </section>
+                </div>
+            </div>
+            <footer class="row">
+                <div class="small-12 large-12 columns">
+                    <a class="gn-icon-other gn-icon-mail"
+                       href="mailto:?Subject={{ authorinfo.user.get_full_name }}&Body={{ authorinfo.biography }} http://{{ site.domain }}{% url 'AuthorInfoView' authorinfo.user.username %}"></a>
+                    <a class="share-popup gn-icon-other gn-icon-facebook"
+                       href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'AuthorInfoView' authorinfo.user.username %}&t={{ authorinfo.user.get_full_name }}"
+                       target="_blank"></a>
+                    <a class="share-popup gn-icon-other gn-icon-googleplus"
+                       href="https://plus.google.com/share?url=http://{{ site.domain }}{% url 'AuthorInfoView' authorinfo.user.username %}"
+                       target="_blank"></a>
+                    <a class="share-popup gn-icon-other gn-icon-twitter divider-right"
+                       href="http://twitter.com/share?url=http://{{ site.domain }}{% url 'AuthorInfoView' authorinfo.user.username %}&t={{ authorinfo.user.get_full_name }}&text={{ authorinfo.biography }}"
+                       target="_blank"></a>
+                </div>
+            </footer>
+        </article>
+    {% empty %}
+    {% endfor %}
+    {% if is_paginated %}
+    <div class="pagination-centered">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="arrow"><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="arrow unavailable"><a href="">&laquo;</a></li>
+            {% endif %}
+            {% for page_num in paginator.page_range %}
+            <li
+            {% if page_num == page_obj.number %} class="current" {% endif %} >
+                <a href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="arrow"><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="arrow unavailable"><a href="">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+    </div>
+    <div class="small-10 large-3 columns">
+        <h2>Recomendados</h2>
+        {% for new in rnews %}
+        <div data-article="">
+            <a data-event="tile"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                {% thumbnail new.first_image.image "150x150" as im %}
+                <img src="{{ im.url }}" title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                {% empty %}
+                <img src="{% static 'tiempoturco/app/images/no-image.png' %}" width="150" title="{{ new.title }}"
+                     alt="{{ new.title }}"/>
+                {% endthumbnail %}
+                <h3>{{ new.title }}</h3>
+            </a>
+        </div>
+        {% empty %}
+        <p>No hay noticias recomendadas disponibles.</p>
+        {% endfor %}
+        <h2>Más</h2>
+        {% for new in mnews %}
+        <div data-article="">
+            <a data-event="tile"
+               href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                <h3>{{ new.title }}</h3>
+            </a>
+        </div>
+        {% empty %}
+        <p>No hay mas noticias importantes noticias disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% load static i18n tz cache %}
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head lang="es">
+    <meta charset="utf-8"/>
+    <!--
+    Desarrollado por Barakat Studios - SalahAdDin
+    =============================================
+
+    This website is powered by BootStrap / SASS - making wep developt and desing more easy!
+    -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    {% block titlepage %}{% endblock %}
+    {% block newsa %} {% endblock %}
+    {% block newsd %} {% endblock %}
+    <meta content="{% block newsk %} {% endblock %}" name="keywords">
+    <meta property="og:image" content="{% block newsi %} {% endblock %}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="{{ site.name }}"/>
+
+    <script src="{% static 'tiempoturco/dist/js/vendor/modernizr.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'tiempoturco/dist/css/libraries.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'tiempoturco/dist/css/app.min.css' %}"/>
+    <link rel="icon" href="{% static 'tiempoturco/dist/images/favicon.ico' %}" type="image/x-icon; charset=binary"/>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-55567911-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body>
+<header>
+    <ul id="gn-menu" class="gn-menu-main">
+        <li class="gn-trigger">
+            <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+            <nav class="gn-menu-wrapper">
+                <div class="gn-scroller">
+                    <ul class="gn-menu">
+                        <li class="gn-search-item">
+                            <form method="get" action="/search/">
+                                <input placeholder="Búsqueda" type="search" class="gn-search" id="id_q" name="q">
+                                <a class="gn-icon gn-icon-search" href=""><span>Búsqueda</span></a>
+                            </form>
+                        </li>
+                        <li><a class="gn-icon gn-icon-eye" href="{% url 'SubTopicNewsView' 'opinion' %}">Opinión</a>
+                        </li>
+                        <li><a class="gn-icon gn-icon-earth" href="{% url 'SubTopicNewsView' 'internacional' %}">Internacionales</a>
+                        </li>
+                        <li>
+                            <a class="gn-icon gn-icon-office" href="{% url 'TopicNewsView' 'sociedad' %}">Sociedad</a>
+                            <ul class="gn-submenu">
+                                <li><a class="gn-icon gn-icon-book"
+                                       href="{% url 'TopicNewsView' 'religion' %}">Religión</a></li>
+                                <li><a class="gn-icon gn-icon-books"
+                                       href="{% url 'TopicNewsView' 'educacion' %}">Educación</a></li>
+                                <li><a class="gn-icon gn-icon-cart"
+                                       href="{% url 'TopicNewsView' 'economia' %}">Economía</a></li>
+                                <li><a class="gn-icon gn-icon-user"
+                                       href="{% url 'TopicNewsView' 'politica' %}">Política</a></li>
+                                <li><a class="gn-icon gn-icon-accessibility"
+                                       href="{% url 'TopicNewsView' 'deportes' %}">Deportes</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="gn-icon gn-icon-book" href="{% url 'TopicNewsView' 'cultura' %}">Cultura</a>
+                            <ul class="gn-submenu">
+                                <li><a class="gn-icon gn-icon-play" href="{% url 'VideoIndexView' %}">Videos</a></li>
+                                <li><a class="gn-icon gn-icon-bookmarks"
+                                       href="{% url 'GalleryIndexView' %}">Galerías</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="gn-icon gn-icon-map">Mapa del Sitio</a>
+                            <ul class="gn-submenu">
+                                <li><a class="gn-icon gn-icon-feed2" href="">Contáctenos</a></li>
+                                <li><a class="gn-icon gn-icon-file-zip" href="">Licencia</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /gn-scroller -->
+            </nav>
+        </li>
+        <li><a class="gn-icon gn-icon-tiempoturco main-title" href="http://{{ site.domain }}">{{ site.name }}</a></li>
+        {% block slidermenu%}{% endblock %}
+        <li id="date" class="show-for-large-up"><a href="{% url 'TodayNewsView' %}">{% now "SHORT_DATE_FORMAT" %}</a>
+        </li>
+    </ul>
+</header>
+<main>
+    <div class="clearfix">
+        <div class="show-for-medium-up columns medium-4 large-3 left" style="position: fixed">
+            <dl class="tabs" data-tab>
+                <dd class="active">
+                    <a class="{%if  users.authorinfo %}gn-icon gn-icon-user{% else %}gn-icon gn-icon-quill{% endif %}"
+                       href="#panel2-1" title="{%if  users.authorinfo %}Periodista{% else %}Titulares{% endif %}"></a></dd>
+                <dd><a class="gn-icon gn-icon-star" href="#panel2-2" title="Populares"></a></dd>
+                <dd><a class="gn-icon gn-icon-camera" href="#panel2-3" title="Fotos"></a></dd>
+                <dd><a class="gn-icon gn-icon-film" href="#panel2-4" title="Videos"></a></dd>
+            </dl>
+            <div class="tabs-content">
+                {% include 'includes/base_menu.html' %}
+            </div>
+        </div>
+        <div class="columns small-12 medium-8 large-9 right">
+            {% block newscontent %}
+
+            {% endblock %}
+        </div>
+    </div>
+</main>
+<footer class="clearfix">
+    <div class="small-12 large-6 columns text-left left">
+        &copy; 2015. Todos los derechos reservados.
+    </div>
+    <div class="small-12 large-6 columns text-right right">
+        Desarrollado por {{ meta_author }} con<a class="gn-icon gn-icon-html5"></a><a class="gn-icon gn-icon-css3"></a>
+    </div>
+</footer>
+<script src="{% static 'tiempoturco/dist/js/vendor/libraries.min.js' %}"></script>
+<script src="{% static 'tiempoturco/dist/js/vendor/foundation.min.js' %}"></script>
+{% block jsplugins %}{% endblock %}
+<script src="{% static 'tiempoturco/dist/js/app.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        baseMenu.gnMenu(document.getElementById('gn-menu'));
+    });
+</script>
+{% block otherscripts %}{% endblock %}
+</body>
+</html>

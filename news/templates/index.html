@@ -1,0 +1,348 @@
+{% extends 'base.html'%}
+{% load thumbnail embed_video_tags %}
+{% load static from staticfiles %}
+{% block titlepage %}
+<title>{{ site.name }}</title>
+<meta property="og:title" content="{{ site.name }}"/>
+{% endblock %}
+{% block newsa %}
+<meta content="{{ meta_author }}" name="author"/>
+<meta property="article:author" content="{{ meta_author }}"/>
+{% endblock %}
+{% block newsd %}
+<meta content="{{ meta_contentsf }}" name="description"/>
+<meta property="og:description" content="{{ meta_contentsf }}"/>
+{% endblock %}
+{% block newsk %}{{ meta_contentss }}{% endblock %}
+{% block slidermenu%}
+<li class="show-for-medium-up"><a class="gn-icon no-padding gn-icon-googleplus"
+                                           href="https://plus.google.com/109635458594440372662"></a>
+<li class="show-for-medium-up"><a class="gn-icon no-padding gn-icon-facebook"
+                                           href="https://www.facebook.com/tiempoturco"></a></li>
+<li class="show-for-medium-up"><a class="gn-icon no-padding gn-icon-twitter"
+                                           href="https://twitter.com/tiempoturco"></a></li>
+<li class="show-for-medium-up"><a class="gn-icon no-padding gn-icon-feed" href="{% url 'RssNewsFeed' %}"></a>
+</li>
+<li><a class="show-for-medium-up gn-icon no-padding gn-icon-youtube"
+       href="https://www.youtube.com/user/tiempoturcoyou"></a></li>
+{% endblock %}
+{% block newscontent %}
+<!-- Seccion de ultima noticia o noticia destacada del diaa-->
+<div class="speed-news-bar">
+    {% if first_new %}
+    <h2>{{ first_new.topic }}</h2>
+    <h3>
+        <a href="{% url 'NewsDefaultView' first_new.created_date|date:'Y' first_new.created_date|date:'m' first_new.created_date|date:'d' first_new.slug %}">
+            {{first_new.title}}</a>
+    </h3>
+    {% endif %}
+</div>
+<div>
+<!-- Noticias Principales -->
+<div class="small-12 large-9 columns">
+<h1 class="text-center">Inicio</h1>
+<!--Slider de Ultimas Noticias-->
+    <div class="text-center">
+    <ul class="" data-orbit data-options="
+                    pause_on_hover:false;
+                    slide_number_text:de;
+                    timer_show_progress_bar: false">
+        {% for new in imnews%}
+        <li
+        {% if forloop.parentloop.first %}class="active"{% endif %}>
+        <a href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+            {% if new.get_video %}
+                {% video new.get_video.video as my_video%}
+                    <img src="{{ my_video.thumbnail }}" alt="new.get_video.name"
+                         title="new.get_video.name"/>
+                {% endvideo %}
+            {% else %}
+                {% thumbnail new.first_image.image "660x250" as im %}
+                <img src="{{ im.url }}" title="{{ new.first_image.name }}" alt="slide {{forloop.counter}}"/>
+                {% empty %}
+                <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}"
+                     title="{{ new.title }}" alt="slide {{forloop.counter}}"/>
+                {% endthumbnail %}
+            {% endif %}
+        </a>
+
+        <div class="orbit-caption"> {{ new.title }}</div>
+        </li>
+        {% empty %}
+        <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}" title="No hay noticias disponibles por el momento." alt="No hay noticias disponibles por el momento."/>
+        <p>No hay noticias disponibles por el momento.</p>
+        {% endfor %}
+    </ul>
+    </div>
+<!-- Galeria de Noticias -->
+<section class="news-gallery">
+    <div class="row">
+        {% for new in object_list %}
+        <article class="small-6 large-6 columns">
+            <figure class="row">
+                <a class="small-12 large-4 columns text-center"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    {% thumbnail new.first_image.image "150x150" as im %}
+                    <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                    title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                    {% empty %}
+                    <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                    {% endthumbnail %}
+                </a>
+                <figcaption class="large-8 columns">
+                    <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                    {{ new.content|truncatewords:'10'|safe }}<a
+                        href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">Leer
+                    mas...</a>
+                </figcaption>
+            </figure>
+        </article>
+        {% if forloop.counter|divisibleby:'2' %}
+    </div>
+    <div class="row">
+        {% endif %}
+        {% empty %}
+        <p>
+            No hay noticias aún!
+        </p>
+        {% endfor %}
+    </div>
+</section>
+<section class="news-gallery">
+    <div class="row">
+        <div class="small-6 large-6 columns">
+            <h1><a class="gn-icon gn-icon-accessibility">Deportes</a></h1>
+            {% for new in snews %}
+            <article>
+                <figure class="row">
+                    <a class="small-12 large-4 columns text-center"
+                       href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                        {% thumbnail new.first_image.image "150x150" as im %}
+                        <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                        title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                        {% endthumbnail %}
+                    </a>
+                    <figcaption class="large-8 columns">
+                        <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                        {{ new.content|truncatewords:'10'|safe }}<a
+                            href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">Leer
+                        mas...</a>
+                    </figcaption>
+                </figure>
+            </article>
+            {% empty %}
+            <p>
+                No hay noticias aún!
+            </p>
+            {% endfor %}
+        </div>
+        <div class="small-6 large-6 columns">
+            <h1><a class="gn-icon gn-icon-book">Cultura</a></h1>
+            {% for new in cnews %}
+            <article>
+                <figure class="row">
+                    <a class="small-12 large-4 columns text-center"
+                       href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                        {% thumbnail new.first_image.image "150x150" as im %}
+                        <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                        title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}"
+                             alt="slide {{ new.title }}"/>
+                        {% endthumbnail %}
+                    </a>
+                    <figcaption class="large-8 columns">
+                        <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                        {{ new.content|truncatewords:'10'|safe }}<a
+                            href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">Leer
+                        mas...</a>
+                    </figcaption>
+                </figure>
+            </article>
+            {% empty %}
+            <p>
+                No hay noticias aún!
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-6 large-6 columns">
+            <h1><a class="gn-icon gn-icon-office">Sociedad</a></h1>
+            {% for new in psnews %}
+            <article>
+                <figure class="row">
+                    <a class="small-12 large-4 columns text-center"
+                       href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                        {% thumbnail new.first_image.image "150x150" as im %}
+                        <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                        title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                        {% endthumbnail %}
+                    </a>
+                    <figcaption class="large-8 columns">
+                        <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                        {{ new.content|truncatewords:'10'|safe }}<a
+                            href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">Leer
+                        mas...</a>
+                    </figcaption>
+                </figure>
+            </article>
+            {% empty %}
+            <p>
+                No hay noticias aún!
+            </p>
+            {% endfor %}
+        </div>
+        <div class="small-6 large-6 columns">
+            <h1><a class="gn-icon gn-icon-earth">Turismo</a></h1>
+            {% for new in tsnews %}
+            <article>
+                <figure class="row">
+                    <a class="small-12 large-4 columns text-center"
+                       href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                        {% thumbnail new.first_image.image "150x150" as im %}
+                        <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                        title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                        {% endthumbnail %}
+                    </a>
+                    <figcaption class="large-8 columns">
+                        <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                        {{ new.content|truncatewords:'10'|safe }}
+                        <a href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                            Leer mas...</a>
+                    </figcaption>
+                </figure>
+            </article>
+            {% empty %}
+            <p>
+                No hay noticias aún!
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-6 large-6 columns">
+            <h1><a class="gn-icon gn-icon-user">Política</a></h1>
+            {% for new in pnews %}
+            <article>
+                <figure class="row">
+                    <a class="small-12 large-4 columns text-center"
+                       href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                        {% thumbnail new.first_image.image "150x150" as im %}
+                        <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                        title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                        {% endthumbnail %}
+                    </a>
+                    <figcaption class="large-8 columns">
+                        <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                        {{ new.content|truncatewords:'10'|safe }}
+                        <a href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                            Leer mas...</a>
+                    </figcaption>
+                </figure>
+            </article>
+            {% empty %}
+            <p>
+                No hay noticias aún!
+            </p>
+            {% endfor %}
+        </div>
+        <div class="small-6 large-6 columns">
+            <h1><a class="gn-icon gn-icon-cart">Economía</a></h1>
+            {% for new in dnews %}
+            <article>
+                <figure class="row">
+                    <a class="small-12 large-4 columns text-center"
+                       href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                        {% thumbnail new.first_image.image "150x150" as im %}
+                        <img id='imggallery' style="margin:{{ im|margin:"150x150" }}" src="{{ im.url }}"
+                        title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                        {% endthumbnail %}
+                    </a>
+                    <figcaption class="large-8 columns">
+                        <h2>{{ new.title|truncatewords:'10'|safe }}</h2>
+                        {{ new.content|truncatewords:'10'|safe }}
+                        <a href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                            Leer mas...</a>
+                    </figcaption>
+                </figure>
+            </article>
+            {% empty %}
+            <p>
+                No hay noticias aún!
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+</div>
+<!--Otras noticias -->
+<div class="small-12 large-3 columns other-news-content">
+    {% if tvideo.video %}
+    <div class="today-video">
+        <h2>Video del dia</h2>
+        <a class="fancybox-media" href="{{ tvideo.video }}">
+            <div class="flex-video widescreen">
+                {% video tvideo.video 'tiny' %}
+            </div>
+        </a>
+
+        <h3><a class="gn-icon gn-icon-play"></a><a href="{% url 'VideoDefaultView' tvideo.slug %}">{{ tvideo.name }}</a>
+        </h3>
+    </div>
+    {% endif %}
+    <div class="today-video">
+        <h2>Caricatura del dia</h2>
+        {% for image in cimage %}
+        <a class="fancybox" rel="gallery1" href="{{ image.image.url }}" title="{{ image.caption }}"
+           caption="{{ image.caption }}">
+            {% thumbnail image.image "180x150" as im %}
+            <img class="th radius" id='imggallery' style="margin:{{ im|margin:"180x150" }};
+                {% if not forloop.first%} display:none{% endif %}" src="{{ im.url }}"
+                title="{{ image.name }}" alt="{{ image.name }}"/>
+            {% empty %}
+            <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+            {% endthumbnail %}
+        </a>
+
+        <h3 class="{% if not forloop.first %}hide{% endif %}"><a href="{% url 'ImageDefaultView' image.slug %}">
+            {{ image.name }}</a></h3>
+        {% empty %}
+        {% endfor %}
+    </div>
+    <!--Columnas -->
+    <div class="opinion-column">
+        <h2>Columnistas</h2>
+        {% for new in opinion %}
+        <div data-article="">
+            <h3 class="row">
+                {% thumbnail new.author.authorinfo.photo "100x100" as im %}
+                <img class="small-5 large-5 columns" id='imggallery' src="{{ im.url }}" title="{{ new.author.first_name }}"
+                     alt="{{ new.author.first_name    }}"/>
+                {% empty %}
+                <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="{{ new.title }}" alt="slide {{ new.title }}"/>
+                {% endthumbnail %}
+                <a class="small-7 large-7 columns" data-event="tile"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    {{ new.title }}
+                </a>
+            </h3>
+            {{ new.content|truncatewords:'10'|safe }}
+        </div>
+        {% empty %}
+        <p>No hay columnas de opinión disponibles hasta el momento.</p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}

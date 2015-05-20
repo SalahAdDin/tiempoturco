@@ -1,0 +1,59 @@
+{% extends 'base_docs.html'%}
+{% load thumbnail %}
+{% load embed_video_tags %}
+{% load static from staticfiles %}
+{% load news %}
+{% block titlepage %}
+<title>{{ news.title }}</title>
+<meta property="og:title" content="{{ news.title }}"/>
+{% endblock %}
+{% block newsa %}
+<meta content="{{ news.author.get_full_name }}" name="author"/>
+<meta property="article:author" content="{{ news.author.get_full_name }}"/>
+{% endblock %}
+{% block newsd %}
+<meta content="{{ news.content|search:'^.*'|removetags:" p"|safe }}" name="description"/>
+<meta property="og:description" content="{{ news.content|search:'^.*'|removetags:" p"|safe }}"/>
+{% endblock %}
+{% block newsk %}{{ news.get_all_keys }}{% endblock %}
+{% block slidermenu%}
+<li class="show-for-medium-up noborder"><a class="gn-icon nopadding gn-icon-googleplus"
+                                           href="https://plus.google.com/109635458594440372662"></a>
+<li class="show-for-medium-up noborder"><a class="gn-icon nopadding gn-icon-facebook"
+                                           href="https://www.facebook.com/tiempoturco"></a></li>
+<li class="show-for-medium-up noborder"><a class="gn-icon nopadding gn-icon-twitter"
+                                           href="https://twitter.com/tiempoturco"></a></li>
+<li class="show-for-medium-up noborder"><a class="gn-icon nopadding gn-icon-feed" href="{% url 'RssNewsFeed' %}"></a>
+</li>
+<li><a class="show-for-medium-up gn-icon nopadding gn-icon-youtube"
+       href="https://www.youtube.com/user/tiempoturcoyou"></a></li>
+{% endblock %}
+{% block newscontent %}
+<article class="row articles-news">
+    <header>
+        <!-- Cabezera del articulo -->
+        <h1>{{ docs.title }}</h1>
+    </header>
+    <section class="row">
+        {% for video in documentation.get_all_videos %}
+        <div class="flex-video player-video">
+            {% video news.get_video.video "medium" %}
+        </div>
+        {% endfor %}
+        {% for image in documentation.get_all_images %}
+        <figure>
+            {% thumbnail image "720" as im %}
+            <img src="{{ im.url }}" title="{{ news.first_image.name }}" alt="{{ news.first_image.name }}"/>
+            {% empty %}
+            <p>Imagen no disponible.</p>
+            {% endthumbnail %}
+            <figcaption>{{ image.caption }}</figcaption>
+        </figure>
+        {% endfor %}
+        {{ news.content|safe }}
+    </section>
+    <footer class="row">
+
+    </footer>
+</article>
+{% endblock %}

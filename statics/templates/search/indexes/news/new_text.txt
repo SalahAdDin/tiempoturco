@@ -1,0 +1,7 @@
+{{ object.author.get_full_name }}
+{{ object.content|safe }}
+{{ object.created_date }}
+{{ object.place }}
+{{ object.title|safe }}
+{{ object.sorted_name|safe }}
+{{ object.times_viewed }}

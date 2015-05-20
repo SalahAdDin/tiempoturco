@@ -1,0 +1,166 @@
+{% extends 'base.html'%}
+{% load thumbnail %}
+{% load embed_video_tags %}
+{% load static from staticfiles %}
+{% block titlepage %}
+<title>Galerías {{ title_page }}</title>
+<meta property="og:title" content="Galerías {{ title_page }}"/>
+{% endblock %}
+{% block newsa %}
+<meta content="{{ meta_author }}" name="author"/>
+<meta property="article:author" content="{{ meta_author }}"/>
+{% endblock %}
+{% block newsd %}
+<meta content="Galerías publicadas en {{ title_page }}" name="description"/>
+<meta property="og:description" content="Galerías publicadas en {{ title_page }}"/>
+{% endblock %}
+{% block newsk %}{{ meta_today_keys }}{% endblock %}{# Si gallery tiene una noticia, entonces las palabras clave del gallery seran las palabras clave de la noticia de la noticia #}
+{% block slidermenu%}
+<li id="slider" class="show-for-medium-up news-slider">
+    <ul id="ulslider" class="" data-orbit data-options="
+            pause_on_hover:false;
+            slide_number_text:de;
+            timer_show_progress_bar: false;
+            bullets: false;
+            slide_number: false" style="height: 3.75rem !important;">
+        {% for new in wnews %}
+        <li data-orbit-slide="headline-{{forloop.counter}}">
+            <div>
+                <a class="left"
+                   href="{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}">
+                    <time datetime="{{ new.created_date|date:'Y-m-d H:i:s' }}">{{ new.created_date|date:'H:i:s' }}
+                    </time>
+                    <h2>{{new.title|truncatewords:'6'}}</h2>
+                </a>
+                <a class="share-popup gn-icon-other nopadding gn-icon-facebook"
+                   href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ news.title }}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other nopadding gn-icon-twitter"
+                   href="http://twitter.com/share?url=http://{{ site.domain }}{% url 'NewsDefaultView' new.created_date|date:'Y' new.created_date|date:'m' new.created_date|date:'d' new.slug %}&t={{ new.title }}&text={{ new.title }}"
+                   target="_blank"></a>
+            </div>
+        </li>
+        {% empty %}
+        <p>No hay noticias disponibles.</p>
+        {% endfor %}
+    </ul>
+</li>
+{% endblock %}
+{% block newscontent %}
+<section class="news-gallery">
+    <h1 style="font-weight: bold; font-size: 2.125rem; border-bottom: 1px dashed #C6D0DA;">Galerías</h1>
+    <div class="row">
+        {% for gallery in object_list %}
+        <article class="small-6 large-6 columns">
+            <figure class="row">
+                <div class=" medium-5 large-5 columns text-center">
+                {% if gallery.get_first_image %}
+                    {% for image in gallery.get_all_images %}
+                    <a class="fancybox" rel="gallery{{ forloop.parentloop.counter }}" href="{{ image.image.url }}" title="{{ image.caption }}"
+                       caption="{{ image.caption }}">
+                        {% thumbnail image.image "180x150" as im %}
+                        <img class="th radius" id='imggallery'
+                             style="{% if not forloop.first%} display:none{% endif %}" src="{{ im.url }}"
+                            title="{{ image.name }}" alt="{{ image.name }}"/>
+                        {% empty %}
+                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="Imagen no disponible." alt="Imagen no disponible."/>
+                        {% endthumbnail %}
+                    </a>
+                    <h3 class="hide"><a href="{% url 'ImageDefaultView' image.slug %}">
+                        {{ image.name }}</a></h3>
+                    {% empty %}
+                    {% endfor %}
+                {% elif gallery.get_first_video %}
+                    {% video gallery.get_first_video.video as my_video%}
+                    <img class="th" src="{{ my_video.thumbnail }}" alt="{{ gallery.name }}" title="{{ gallery.name }}"/>
+                    {% endvideo %}
+                {% endif %}
+                </div>
+                <figcaption class="small-12 medium-7 large-7">
+                    <h2>{{ gallery.name }}</h2>
+
+                    <p>{{ gallery.caption|safe }}<a href="{% url 'GalleryDefaultView' gallery.slug %}">Ver mas...</a></p>
+                </figcaption>
+            </figure>
+            <div class="row sharing-footer">
+                <a class="gn-icon-other gn-icon-mail"
+                   href="mailto:?Subject={{ gallery.name }}&Body={{ gallery.caption|safe }} http://{{ site.domain }}{% url 'GalleryDefaultView' gallery.slug %}"></a>
+                <a class="share-popup gn-icon-other gn-icon-facebook"
+                   href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'GalleryDefaultView' gallery.slug %}&t={{ gallery.name }}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other gn-icon-googleplus"
+                   href="https://plus.google.com/share?url=http://{{ site.domain }}{% url 'GalleryDefaultView' gallery.slug %}"
+                   target="_blank"></a>
+                <a class="share-popup gn-icon-other gn-icon-twitter"
+                   href="http://twitter.com/share?url=http://{{ site.domain }}{% url 'GalleryDefaultView' gallery.slug %}&t={{ gallery.name }}&text={{ gallery.caption|safe }}"
+                   target="_blank"></a>
+                <a class="gn-icon-other gn-icon-bubble" href="{% url 'GalleryDefaultView' gallery.slug %}" title="Comentarios para {{gallery.name}}">
+                    <span class="disqus-comment-count" data-disqus-url="{% url 'GalleryDefaultView' gallery.slug %}">#</span>
+                </a>
+            </div>
+        </article>
+        {% if forloop.counter|divisibleby:'2' %}
+    </div>
+    <div class="row">
+        {% endif %}
+        {% empty %}
+        <p>
+            No hay galerías aún!
+        </p>
+        {% endfor %}
+    </div>
+</section>
+{% if is_paginated %}
+<div class="pagination-centered">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="arrow"><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+        <li class="arrow unavailable"><a href="">&laquo;</a></li>
+        {% endif %}
+        {% for page_num in paginator.page_range %}
+        <li
+        {% if page_num == page_obj.number %} class="current" {% endif %} ><a href="?page={{ page_num }}">{{ page_num
+        }}</a></li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="arrow"><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+        <li class="arrow unavailable"><a href="">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+{% block jsplugins %}
+<script src="{% static 'tiempoturco/app/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+<!-- Add fancyBox -->
+<link rel="stylesheet" href="{% static 'tiempoturco/app/bower_components/fancybox/source/jquery.fancybox.css' %}" type="text/css"
+      media="screen"/>
+<script type="text/javascript"
+        src="{% static 'tiempoturco/app/bower_components/fancybox/source/jquery.fancybox.pack.js' %}"></script>
+{% endblock %}
+{% block otherscripts %}
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'tiempoturco'; // required: replace example with your forum shortname
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var nodes = document.getElementsByTagName('span');
+        for (var i = 0, url; i < nodes.length; i++) {
+            if (nodes[i].className.indexOf('disqus-comment-count') != -1) {
+                nodes[i].parentNode.setAttribute('data-disqus-url', nodes[i].getAttribute('data-disqus-url'));
+                url = nodes[i].parentNode.href.split('#', 1);
+                if (url.length == 1) { url = url[0]; }
+                else { url = url[1]; }
+                nodes[i].parentNode.href = url + '#disqus_thread';
+            }
+        }
+        var s = document.createElement('script');
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+{% endblock %}

@@ -1,0 +1,466 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-29 23:04-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: authors/admin.py:25
+msgid "Profile"
+msgstr "Perfíl"
+
+#: authors/admin.py:26
+msgid "Profiles"
+msgstr "Perfiles"
+
+#: authors/admin.py:41
+msgid "Personal Information"
+msgstr "Información Personal"
+
+#: authors/admin.py:43
+msgid "Important Dates"
+msgstr "Fechas Importantes"
+
+#: authors/admin.py:63 authors/admin.py:95 news/models.py:40 tags/admin.py:22
+#: tags/admin.py:44 tags/admin.py:65 tiempoturco/settings/base.py:250
+msgid "News"
+msgstr "Noticias"
+
+#: authors/admin.py:74 authors/admin.py:90 authors/models.py:15
+msgid "User"
+msgstr "Usuario"
+
+#: authors/admin.py:78 news/admin.py:56 visuals/admin.py:53
+#: visuals/admin.py:87 visuals/admin.py:110
+msgid "Information"
+msgstr "Información"
+
+#: authors/admin.py:108 authors/models.py:14
+msgid "Photo"
+msgstr "Foto"
+
+#: authors/models.py:16
+msgid "Biography"
+msgstr "Biografía"
+
+#: authors/models.py:17
+msgid "Age"
+msgstr "Edad"
+
+#: authors/models.py:18
+msgid "Link"
+msgstr "Enlace"
+
+#: authors/models.py:21 docs/models.py:13 news/models.py:18
+#: visuals/models.py:16
+msgid "Author"
+msgstr "Autor"
+
+#: authors/models.py:22
+msgid "Authors"
+msgstr "Autores"
+
+#: docs/admin.py:50 docs/models.py:17 news/admin.py:50 news/forms.py:20
+#: news/models.py:29 visuals/admin.py:49 visuals/admin.py:83
+#: visuals/admin.py:106
+msgid "Title"
+msgstr "Título"
+
+#: docs/admin.py:53 docs/models.py:14 news/admin.py:53 news/models.py:19
+#: visuals/admin.py:85 visuals/admin.py:108
+msgid "Content"
+msgstr "Contenido"
+
+#: docs/admin.py:66 news/admin.py:71 visuals/admin.py:65
+msgid "General"
+msgstr "General"
+
+#: docs/admin.py:66 news/admin.py:71 visuals/admin.py:65 visuals/models.py:97
+msgid "Images"
+msgstr "Imágenes"
+
+#: docs/admin.py:66 news/admin.py:71 visuals/admin.py:65 visuals/models.py:133
+msgid "Videos"
+msgstr "Videos"
+
+#: docs/models.py:15 news/models.py:20 visuals/models.py:19
+#: visuals/models.py:70 visuals/models.py:105
+msgid "Datetime"
+msgstr "Fecha y hora"
+
+#: docs/models.py:16
+msgid "Index"
+msgstr "Índice"
+
+#: docs/models.py:18 news/models.py:30 tags/models.py:11 tags/models.py:33
+#: tags/models.py:55 visuals/models.py:23 visuals/models.py:78
+#: visuals/models.py:114
+msgid "Slug"
+msgstr "Marca"
+
+#: docs/models.py:21
+msgid "Documents"
+msgstr "Documentos"
+
+#: docs/models.py:22 tiempoturco/settings/base.py:244 visuals/models.py:72
+#: visuals/models.py:107
+msgid "Documentation"
+msgstr "Documentación"
+
+#: news/admin.py:114 news/admin.py:124
+msgid "1 new was"
+msgstr "1 noticia fue"
+
+#: news/admin.py:116 news/admin.py:126
+#, python-format
+msgid "%s news were"
+msgstr "%s noticias fueron"
+
+#: news/admin.py:117 news/admin.py:127
+#, python-format
+msgid "%s successfully published."
+msgstr "%s exitosamente publicada(s)"
+
+#: news/admin.py:119
+msgid "Publish New"
+msgstr "Publicar noticia"
+
+#: news/admin.py:129
+msgid "Un-publish New"
+msgstr "No publicar noticia"
+
+#: news/forms.py:18
+msgid "No order"
+msgstr "Sin orden"
+
+#: news/forms.py:19
+msgid "Date"
+msgstr "Fecha"
+
+#: news/forms.py:21
+msgid "As seen"
+msgstr "Veces visto"
+
+#: news/forms.py:63
+msgid "Search it and Find it!"
+msgstr "Búscalo y encuentralo!"
+
+#: news/models.py:21
+msgid "Published"
+msgstr "Publicado"
+
+#: news/models.py:22 tags/models.py:18
+msgid "Keywords"
+msgstr "Palabras clave"
+
+#: news/models.py:23
+msgid "Tags related with this new!"
+msgstr "Palabras clave relacionadas con esta noticia!"
+
+#: news/models.py:24
+msgid "Place"
+msgstr "Lugar"
+
+#: news/models.py:25
+msgid "Place in which the new happened. Normally is a city!"
+msgstr "Lugar en el cuál ocurrió la noticia. Normalmente es una ciudad!"
+
+#: news/models.py:26
+msgid "Source"
+msgstr "Fuente"
+
+#: news/models.py:27
+msgid "Source of the new, for example, a web page."
+msgstr "Fuente de la noticia, por ejemplo, una página web"
+
+#: news/models.py:28 visuals/models.py:26 visuals/models.py:81
+#: visuals/models.py:113
+msgid "Times viewed"
+msgstr "Veces visto"
+
+#: news/models.py:31
+msgid "Put a title's copy as slug automatically!"
+msgstr "Pone una copia del título como marca automáticamente!"
+
+#: news/models.py:32 tags/models.py:39 tags/models.py:56
+msgid "Topic"
+msgstr "Tema"
+
+#: news/models.py:35 tags/models.py:62
+msgid "Subtopic"
+msgstr "Subtema"
+
+#: news/models.py:39 visuals/models.py:21 visuals/models.py:76
+#: visuals/models.py:111
+msgid "New"
+msgstr "Noticia"
+
+#: news/models.py:92
+msgid "A new story are waiting to be edited!"
+msgstr "Una nueva notica espera ser editada!"
+
+#: news/models.py:117
+msgid "Your new was published!"
+msgstr "Tu noticia fue publicada"
+
+#: statics/templates/admin/base_site.html:34
+#, fuzzy
+#| msgid "Language"
+msgid "language"
+msgstr "Lenguaje"
+
+#: statics/templates/admin/base_site.html:44
+msgid "Go"
+msgstr "Ir"
+
+#: statics/templates/admin/index.html:19
+#, python-format
+msgid "Models available in the %(name)s application."
+msgstr "Modelos disponibles en la aplicación %(name)s"
+
+#: statics/templates/admin/index.html:26
+msgid "Change"
+msgstr "Modificar"
+
+#: statics/templates/admin/index.html:34
+msgid "Add"
+msgstr "Agregar"
+
+#: statics/templates/admin/index.html:45
+#: statics/templates/admin/index.html:109
+msgid "You don't have permission to edit anything."
+msgstr "No tienes permiso para editar algo."
+
+#: statics/templates/admin/index.html:54
+msgid "My Actions"
+msgstr "Mis acciones"
+
+#: statics/templates/admin/index.html:59 statics/templates/admin/index.html:96
+msgid "None available"
+msgstr "Nada disponible"
+
+#: statics/templates/admin/index.html:68
+msgid "added"
+msgstr "Agregado"
+
+#: statics/templates/admin/index.html:69
+msgid "changed"
+msgstr "cambiado"
+
+#: statics/templates/admin/index.html:70
+msgid "deleted"
+msgstr "eliminado"
+
+#: statics/templates/admin/index.html:76
+msgid "Unknown content"
+msgstr "Contenido desconocido"
+
+#: statics/templates/admin/index.html:92
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#: tags/admin.py:49 tags/models.py:63
+msgid "Subtopics"
+msgstr "Subtemas"
+
+#: tags/models.py:10 tags/models.py:32 tags/models.py:54 visuals/models.py:20
+#: visuals/models.py:65 visuals/models.py:102
+msgid "Name"
+msgstr "Nombre"
+
+#: tags/models.py:17
+msgid "Keyword"
+msgstr "Palabra clave"
+
+#: tags/models.py:40
+msgid "Topics"
+msgstr "Temas"
+
+#: tiempoturco/dashboard.py:26
+msgid "Group: Administration & Applications"
+msgstr "Grupo: Administración y aplicaciones"
+
+#: tiempoturco/dashboard.py:31
+msgid "Administration"
+msgstr "Administración"
+
+#: tiempoturco/dashboard.py:37
+msgid "Applications"
+msgstr "Aplicaciones"
+
+#: tiempoturco/dashboard.py:47
+msgid "AppList: Applications"
+msgstr "Lista de Aplicaciones: Applications"
+
+#: tiempoturco/dashboard.py:55
+msgid "ModelList: Administration"
+msgstr "Lista de Modelos: Administración"
+
+#: tiempoturco/dashboard.py:63
+msgid "Media Management"
+msgstr "Manejador de Medios"
+
+#: tiempoturco/dashboard.py:67
+msgid "FileBrowser"
+msgstr "Navegador de Archivos"
+
+#: tiempoturco/dashboard.py:76
+msgid "Support"
+msgstr "Soporte"
+
+#: tiempoturco/dashboard.py:80
+msgid "Django Documentation"
+msgstr "Documentación de Django"
+
+#: tiempoturco/dashboard.py:85
+msgid "Grappelli Documentation"
+msgstr "Documentación de Grappelli"
+
+#: tiempoturco/dashboard.py:90
+msgid "Grappelli Google-Code"
+msgstr "Código Google de Grappelli"
+
+#: tiempoturco/dashboard.py:99
+msgid "Latest Django News"
+msgstr "Últimas noticias de Django"
+
+#: tiempoturco/dashboard.py:107
+msgid "Recent Actions"
+msgstr "Acciones recientes"
+
+#: tiempoturco/settings/base.py:102
+msgid "Spanish"
+msgstr "Español"
+
+#: tiempoturco/settings/base.py:103
+msgid "English"
+msgstr "Inglés"
+
+#: tiempoturco/settings/base.py:104
+msgid "Turkish"
+msgstr "Turco"
+
+#: tiempoturco/settings/base.py:246
+msgid "Journalist"
+msgstr "Periodísta"
+
+#: tiempoturco/settings/base.py:248
+msgid "Visual Media"
+msgstr "Medios"
+
+#: tiempoturco/settings/base.py:252
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: visuals/admin.py:51
+msgid "Gallery's Name"
+msgstr "Nombre de la Galería"
+
+#: visuals/admin.py:55
+msgid "Gallery's Information"
+msgstr "Información de la Galería"
+
+#: visuals/admin.py:70 visuals/models.py:66 visuals/models.py:96
+msgid "Image"
+msgstr "Imagen"
+
+#: visuals/admin.py:123 visuals/models.py:117 visuals/models.py:132
+msgid "Video"
+msgstr "Video"
+
+#: visuals/models.py:17 visuals/models.py:67 visuals/models.py:103
+msgid "Description"
+msgstr "Descripción"
+
+#: visuals/models.py:18
+msgid "Brief description of this gallery."
+msgstr "Breve descripción de esta galería."
+
+#: visuals/models.py:22
+msgid "New related with this Gallery."
+msgstr "Noticia relacionada con esta galería"
+
+#: visuals/models.py:24
+msgid ""
+"Put a title's copy as slug automatically. Please, put a appropriate name for "
+"this Gallery!"
+msgstr ""
+"Pone una copia del título como marca automáticamente!. Por favor, pon un nombre apropiado para "
+"esta Galería!"
+
+#: visuals/models.py:59 visuals/models.py:74 visuals/models.py:109
+msgid "Gallery"
+msgstr "Gallería"
+
+#: visuals/models.py:60
+msgid "Galleries"
+msgstr "Galerías"
+
+#: visuals/models.py:68
+msgid ""
+"Brief description of this image, for example, in a news webpage, the text "
+"under new's image.(Copy it and put here.)"
+msgstr ""
+"Breve descripción de esta imagen, por ejemplo, en una página web de noticias, el texto "
+"debajo de la imagen de la noticia.(Cópialo y pégalo aquí!)"
+
+#: visuals/models.py:73
+msgid "Document related with this Image."
+msgstr "Documento relacionado con esta Imagen."
+
+#: visuals/models.py:75
+msgid "Gallery related with this Image."
+msgstr "Galería relacionada con esta Imagen."
+
+#: visuals/models.py:77
+msgid "New related with this Image."
+msgstr "Noticia relacionada con esta Imagen"
+
+#: visuals/models.py:79
+msgid ""
+"Put a title's copy as slug automatically. Please, put a appropriate name for "
+"this Image!"
+msgstr ""
+"Pone una copia del título como marca automáticamente!. Por favor, pon un nombre apropiado para "
+"esta Imagen!"
+
+#: visuals/models.py:104
+msgid "Brief description about this video."
+msgstr "Breve descripción sobre este vide."
+
+#: visuals/models.py:108
+msgid "Document related with this Video."
+msgstr "Documento relacionado con este Video."
+
+#: visuals/models.py:110
+msgid "Gallery related with this Video."
+msgstr "Galería relacionada con este Video."
+
+#: visuals/models.py:112
+msgid "New related with this Video."
+msgstr "Noticia relacionada con este video."
+
+#: visuals/models.py:115
+msgid ""
+"Put a title's copy as slug automatically. Please, put a appropriate name for "
+"this Video!"
+msgstr ""
+"Pone una copia del título como marca automáticamente!. Por favor, pon un nombre apropiado para "
+"este Video!"
+
+#: visuals/models.py:117
+msgid "Video's URL, for example, youtube's url."
+msgstr "URL del Video, por ejemplo, la url de youtube."

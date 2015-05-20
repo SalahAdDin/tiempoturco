@@ -1,0 +1,75 @@
+{% extends "admin/base.html" %}
+{% load admin_static i18n %}
+
+{# Additional <head> content here, some extra meta tags or favicon #}
+{% block extrahead %}
+    <link rel="icon" href="{% static 'tiempoturco/dist/images/favicon.ico' %}" type="image/x-icon; charset=binary"/>
+{% endblock %}
+
+
+{# Additional CSS includes #}
+{#{% block extrastyle %}#}
+{#  <link rel="stylesheet" type="text/css" href="{% static 'css/my_project.css' %}" media="all">#}
+{#{% endblock %}#}
+
+
+{# Additional JS files in footer, right before </body> #}
+{#{% block extrajs %}#}
+{#  <script type="text/javascript" src="{% static 'js/my_project.js' %}"></script>#}
+{#{% endblock %}#}
+
+
+{# Footer links (left side) #}
+{#{% block footer_links %}#}
+{#  <a href="/docs/" class="icon"><i class="icon-question-sign"></i>Documentation</a>#}
+{#{% endblock %}#}
+
+{# Additional header content like notifications or language switcher #}
+{% block header_content %}
+{#    {{ block.super }}#}
+    <div class="header-content">
+    <form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}" />
+    <select name="{% trans 'language' %}" style="width: auto;">
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
+    {% for language in languages %}
+    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+        {{ language.name_local }} ({{ language.code }})
+    </option>
+    {% endfor %}
+    </select>
+    <input class="btn btn-high" type="submit" value="{% trans 'Go' %}" style="vertical-align: top;"/>
+    </form>
+    </div>
+    {#    <div class="header-content">#}
+{#        <!-- First icon column -->#}
+{#        <div class="header-column icon">#}
+{#            <i class="icon-home"></i><br>#}
+{#            <i class="icon-cog"></i>#}
+{#        </div>#}
+{#        <div class="header-column" style="margin-right: 20px">#}
+{#            <a href="/" class="grey">Front-end</a><br>#}
+{#            <a href="" class="grey">One more link</a>#}
+{#        </div>#}
+{#        <!-- Second icon column -->#}
+{#        <div class="header-column icon">#}
+{#            <i class="icon-comment"></i>#}
+{#        </div>#}
+{#        <div class="header-column">#}
+{#            <a href="" class="grey">5 new messages</a>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}
+
+{# Footer branding name (center) #}
+{#{% block footer_branding %}#}
+{#{% endblock %}#}
+
+{# Footer copyright (right side) #}
+{#{% block copyright %}#}
+&copy; 2015. Todos los derechos reservados.<br>Desarrollado por {{ meta_author }} con<a
+            class="gn-icon gn-icon-html5"></a>
+{#{% endblock %}#}
