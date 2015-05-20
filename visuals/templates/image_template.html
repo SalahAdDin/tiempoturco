@@ -124,7 +124,7 @@
             {% thumbnail image.image "x480" as im %}
             <img src="{{ im.url }}" title="{{ image.name }}" alt="{{ image.name }}"/>
             {% empty %}
-            <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}" title="{{ image.name }}" alt="{{ image.name }}"/>
+            <img src="{% static 'tiempoturco/dist/images/no-image-big.png' %}" title="{{ image.name }}" alt="{{ image.name }}"/>
             {% endthumbnail %}
         </div>
         <div class="video-caption">

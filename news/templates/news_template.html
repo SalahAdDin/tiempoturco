@@ -19,7 +19,7 @@
 {% thumbnail news.first_image.image "720" as im %}
 {{ im.url }}
 {% empty %}
-{% static 'tiempoturco/app/images/no-image.png' %}
+{% static 'tiempoturco/dist/images/no-image.png' %}
 {% endthumbnail %}
 {% endblock %}
 {% block slidermenu%}
@@ -120,7 +120,7 @@
                     {% thumbnail new.first_image.image "150x150" as im %}
                     <img src="{{ im.url }}" title="{{ new.first_image.name }}" alt="{{ new.first_image.name }}"/>
                     {% empty %}
-                    <img src="{% static 'tiempoturco/app/images/no-image.png' %}" width="150" title="{{ new.title }}"
+                    <img src="{% static 'tiempoturco/dist/images/no-image.png' %}" width="150" title="{{ new.title }}"
                      alt="{{ new.title }}"/>
                     {% endthumbnail %}
                     {% endif %}
@@ -145,7 +145,7 @@
                 {% thumbnail image.image "660x350" as im %}
                 <img src="{{ im.url }}" title="{{ image.name }}" alt="slide {{forloop.counter}}"/>
                 {% empty %}
-                <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}" title="{{ image.name }}" alt="slide {{forloop.counter}}"/>
+                <img src="{% static 'tiempoturco/dist/images/no-image-big.png' %}" title="{{ image.name }}" alt="slide {{forloop.counter}}"/>
                 {% endthumbnail %}
                 </a>
             <div class="orbit-caption">

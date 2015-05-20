@@ -63,7 +63,7 @@
                              style="{% if not forloop.first%} display:none{% endif %}" src="{{ im.url }}"
                             title="{{ image.name }}" alt="{{ image.name }}"/>
                         {% empty %}
-                        <img src="{% static 'tiempoturco/app/images/no-image.png' %}" title="Imagen no disponible." alt="Imagen no disponible."/>
+                        <img src="{% static 'tiempoturco/dist/images/no-image.png' %}" title="Imagen no disponible." alt="Imagen no disponible."/>
                         {% endthumbnail %}
                     </a>
                     <h3 class="hide"><a href="{% url 'ImageDefaultView' image.slug %}">
@@ -131,14 +131,6 @@
     </ul>
 </div>
 {% endif %}
-{% endblock %}
-{% block jsplugins %}
-<script src="{% static 'tiempoturco/app/bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
-<!-- Add fancyBox -->
-<link rel="stylesheet" href="{% static 'tiempoturco/app/bower_components/fancybox/source/jquery.fancybox.css' %}" type="text/css"
-      media="screen"/>
-<script type="text/javascript"
-        src="{% static 'tiempoturco/app/bower_components/fancybox/source/jquery.fancybox.pack.js' %}"></script>
 {% endblock %}
 {% block otherscripts %}
 <script type="text/javascript">

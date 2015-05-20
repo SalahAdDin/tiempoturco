@@ -105,7 +105,7 @@
                             <img src="{{ im.url }}"
                                  title="{{ image.name }}" alt="slide {{forloop.counter}}"/>
                             {% empty %}
-                            <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}"
+                            <img src="{% static 'tiempoturco/dist/images/no-image-big.png' %}"
                                 title="Imagen no disponible." alt="Imagen no disponible."/>
                             {% endthumbnail %}
                         </a>
@@ -115,7 +115,7 @@
                     {% if not gallery.get_all_videos%}
                     <li>
                         <a href="">
-                            <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}"
+                            <img src="{% static 'tiempoturco/dist/images/no-image-big.png' %}"
                                     title="No hay imagenes en ésta galería." alt="No hay imagenes en ésta galería."/>
                         </a>
                         <div class="orbit-caption">No hay imagenes en ésta galería.</div>
@@ -135,7 +135,7 @@
                     {% empty %}
                     <li>
                         <a href="">
-                            <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}"
+                            <img src="{% static 'tiempoturco/dist/images/no-image-big.png' %}"
                                     title="No hay videos en ésta galería." alt="No hay videos en ésta galería."/>
                         </a>
                         <div class="orbit-caption">No hay videos en ésta galería.</div>
@@ -152,7 +152,7 @@
                     <img src="{{ im.url }}" title="{{ image.name }}"
                          alt="slide {{forloop.counter}}"/>
                     {% empty %}
-                    <img src="{% static 'tiempoturco/app/images/no-image.png' %}"
+                    <img src="{% static 'tiempoturco/dist/images/no-image.png' %}"
                          title="Imagen no disponible." alt="Imagen no disponible."/>
                     {% endthumbnail %}
                 </a>
@@ -190,7 +190,7 @@
                     {% empty %}
                     <li>
                         <a href="">
-                            <img src="{% static 'tiempoturco/app/images/no-image-big.png' %}"
+                            <img src="{% static 'tiempoturco/dist/images/no-image-big.png' %}"
                                     title="No hay videos en ésta galería." alt="No hay videos en ésta galería."/>
                         </a>
                         <div class="orbit-caption">No hay videos en ésta galería.</div>
